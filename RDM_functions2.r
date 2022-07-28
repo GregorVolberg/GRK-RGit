@@ -3,16 +3,20 @@ getLowerTri = function(dataIn){
 }
 
 makeDist <- function(dataIn){
-  getLowerTri(dist(tet))
+  getLowerTri(as.matrix(dist(dataIn)))
 }  
+
+# tet=df$brightness
+# p= as.matrix(dist(tet))
+# p2 = getLowerTri(p)
 # k = dataIn[[1]]
 # m = k[lower.tri(k)]
 # r = row(lower.tri(k)==T);  c = col(lower.tri(k))
 
-vectorizeRDM = function(dataIn){
-  onlyLower = dataIn[lower.tri(dataIn)] # remove diagonal and off-diagonal
-  vectorizedAndRankTransformed = lapply(onlyLower, rank, na='keep')
-}
+# vectorizeRDM = function(dataIn){
+#   onlyLower = dataIn[lower.tri(dataIn)] # remove diagonal and off-diagonal
+#   vectorizedAndRankTransformed = lapply(onlyLower, rank, na='keep')
+# }
 
 getNoiseCeilingKendall = function(dataIn){
   # Nili et al. 2014, page 7

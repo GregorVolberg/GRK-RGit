@@ -55,11 +55,6 @@ df  <-    bind_rows(dfc, dfg) %>%
           select(-1) %>%
           left_join(stmList,., by = 'image_id')
 
-## falsch!!
-
-tet=df$brightness
-p= getLowerTri(dist(tet))
-
 brightness     <- makeDist(df$brightness)
 sharpness      <- makeDist(df$sharpness)
 contrast       <- makeDist(df$contrast)
@@ -75,17 +70,41 @@ fm <- as_tibble(data.frame(eeg106 = dVec, brightness, sharpness, contrast,
                 colorfuless = colourfulness, entropy, saturation,
                 naturalness, ColorHistogram))
 
-saveRDS(fm, 'fm_2.rds')
-fm2 <- fm #neu
-
-fm <- readRDS('fm.rds')
-dim(fm2)
-
-all(fm == fm2)
+saveRDS(fm, 'fm.rds')
 
 
 
-# scatter density plot
+# for nutrition
+dfStim <- df %>%
+  filter(type == 'german') %>%
+  mutate(image_id = str_sub(image_id, 1,-5)) %>%
+  select(nr, type, image_id)
+
+dfNut <- read_csv('./cropped_ge_ge_Nut.csv') %>%
+  rename(image_id = 'recipe_id') %>%
+  left_join(dfStim,., by = 'image_id') %>%
+  select(nr, type, image_id, kj, kcal, Eiweiss, Kohlenhydrate, Fett) 
+
+write.csv(dfNut, file = 'GRKnutrition.csv', row.names = FALSE)
+
+kj       <- makeDist(dfNut$kj)
+kcal     <- makeDist(dfNut$kcal)
+Eiweiss  <- makeDist(dfNut$Eiweiss)
+Kohlenhydrate  <- makeDist(dfNut$Kohlenhydrate)
+Fett  <- makeDist(dfNut$Fett)
+
+
+
+m2 = m[115:228, 115:228] # similarity matrix, only german
+dn    <- as.dist(m2) #
+dVecn <- vectorizeRDM(dn)
+
+fmNut <- as_tibble(data.frame(eeg106 = dVecn, kj, kcal, Eiweiss, Kohlenhydrate, Fett))
+
+write.csv(fmNut, file = 'GRKnutritionRDM.csv', row.names = FALSE)
+
+
+  # scatter density plot
 ggplot(fm, aes(eeg106, brightness)) +
     geom_point()
 
