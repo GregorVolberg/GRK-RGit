@@ -1,7 +1,10 @@
 getLowerTri = function(dataIn){
   dataIn[lower.tri(dataIn)]
 }
-  
+
+makeDist <- function(dataIn){
+  getLowerTri(dist(tet))
+}  
 # k = dataIn[[1]]
 # m = k[lower.tri(k)]
 # r = row(lower.tri(k)==T);  c = col(lower.tri(k))
@@ -35,7 +38,7 @@ getAverageRDM = function(dataIn, method = 'mean'){
 }
 
 vectorizeRDM = function(dataIn){
-  simplify2array(lapply(synRDM, as.vector))
+  simplify2array(lapply(dataIn, as.vector))
 }
 
 zRDM = function(dataIn){

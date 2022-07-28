@@ -19,9 +19,9 @@ dVec <- vectorizeRDM(d) # for correlation
 #mMat <- makeSymRDM(m)
 #dMat <- dist(mMat, upper=TRUE, diag=TRUE)
 
-plotMDS2(d, 
-        Colors = c(rep('blue', 114), rep('grey10', 114)),
-        xyScale = 100)
+# plotMDS2(d, 
+#         Colors = c(rep('blue', 114), rep('grey10', 114)),
+#         xyScale = 100)
 
 Colors <- c(rep('blue', 114), rep('grey', 114))
 heatmap.2(d2,
@@ -55,6 +55,10 @@ df  <-    bind_rows(dfc, dfg) %>%
           select(-1) %>%
           left_join(stmList,., by = 'image_id')
 
+## falsch!!
+
+tet=df$brightness
+p= getLowerTri(dist(tet))
 
 brightness     <- makeDist(df$brightness)
 sharpness      <- makeDist(df$sharpness)
@@ -71,7 +75,15 @@ fm <- as_tibble(data.frame(eeg106 = dVec, brightness, sharpness, contrast,
                 colorfuless = colourfulness, entropy, saturation,
                 naturalness, ColorHistogram))
 
-saveRDS(fm, 'fm.rds')
+saveRDS(fm, 'fm_2.rds')
+fm2 <- fm #neu
+
+fm <- readRDS('fm.rds')
+dim(fm2)
+
+all(fm == fm2)
+
+
 
 # scatter density plot
 ggplot(fm, aes(eeg106, brightness)) +
